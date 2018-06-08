@@ -3,11 +3,13 @@ module Merit
 
   module ClassMethods
     def has_merit(options = {})
+      sash_class_name = options.delete(:sash_class_name) || 'Merit::Sash'
+
       # MeritableModel#sash_id is more stable than Sash#meritable_model_id
       # That's why MeritableModel belongs_to Sash. Can't use
       # dependent: destroy as it may raise FK constraint exceptions. See:
       # https://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/1079-belongs_to-dependent-destroy-should-destroy-self-before-assocation
-      belongs_to :sash, class_name: 'Merit::Sash', inverse_of: nil, optional: true
+      belongs_to :sash, class_name: sash_class_name, inverse_of: nil, optional: true
       attr_accessible :sash if show_attr_accessible?
 
       send :"_merit_#{Merit.orm}_specific_config"
